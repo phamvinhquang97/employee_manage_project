@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý nhân viên</title>
+  <title>Employee List</title>
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -110,11 +110,10 @@
           <div class="card-header myCardHeader">
             <div class="row">
               <div class="col-md-6">
-                <h3 class="text-left text-primary font-weight-bold">Danh sách nhân viên</h3>
+                <h3 class="text-left text-primary font-weight-bold">Employee List </h3>
               </div>
               <div class="col-md-6 text-right">
-                <button class="btn btn-primary" id="btnThem" data-toggle="modal" data-target="#myModal">Thêm nhân
-                  viên</button>
+                <button class="btn btn-primary" id="btnThem" data-toggle="modal" data-target="#myModal">Add New Employee</button>
                 <!-- <button class="btn btn-info" id="btnLuuLS">Lưu LS</button>
                 <button class="btn btn-info" id="btnLayLS">Lấy LS</button> -->
               </div>
@@ -126,7 +125,7 @@
             <div class="row mb-3">
               <div class="col">
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Tên nhân viên" id="searchName">
+                  <input type="text" class="form-control" placeholder="Enter name" id="employeeName"searchName">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="btnTimNV"><i class="fa fa-search"></i></span>
                   </div>
@@ -137,15 +136,15 @@
               <thead class="text-primary">
                 <tr>
                   <th class="nowrap">
-                    <span class="mr-1">Mã nhân viên</span>
+                    <span class="mr-1">Employee ID</span>
                     <i class="fa fa-arrow-up" id="SapXepTang"></i>
                     <i class="fa fa-arrow-down" id="SapXepGiam"></i>
                   </th>
-                  <th>Họ và tên nhân viên</th>
+                  <th>Employee Name</th>
                   <th>Email</th>
-                  <th>Ngày làm</th>
-                  <th>Chức vụ</th>
-                  <th>Tổng lương</th>
+                  <th>Date Start</th>
+                  <th>Position</th>
+                  <th>Amount of Salary</th>
                   <th><em class="fa fa-cog"></em></th>
                 </tr>
               </thead>
@@ -195,7 +194,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fa fa-user"></i></span>
                 </div>
-                <input type="msnv" name="msnv" id="msnv" class="form-control input-sm" placeholder="Mã số nhân viên">
+                <input type="msnv" name="msnv" id="msnv" class="form-control input-sm" placeholder="Employee ID">
               </div>
 
               <span class="sp-thongbao" id="tbMaNV"></span>
@@ -206,7 +205,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fa fa-address-book"></i></span>
                 </div>
-                <input type="name" name="name" id="name" class="form-control input-sm" placeholder="Họ và tên">
+                <input type="name" name="name" id="name" class="form-control input-sm" placeholder="Firstname and Surname">
               </div>
               <span class="sp-thongbao" id="tbTen"></span>
             </div>
@@ -228,7 +227,7 @@
                   <span class="input-group-text"><i class="fa fa-key"></i></span>
                 </div>
                 <input type="password" name="password" id="password" class="form-control input-sm"
-                  placeholder="Mật khẩu">
+                  placeholder="Password">
               </div>
               <span class="sp-thongbao" id="tbMatKhau"></span>
             </div>
@@ -238,8 +237,8 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                 </div>
-                <input type="text" name="ngaylam" id="datepicker" class="form-control" placeholder="Ngày làm">
-              </div>
+                <input type="text" name="startDate" id="datepicker" class="form-control" placeholder="Ngày làm">
+              </div>  
 
               <span class="sp-thongbao" id="tbNgay"></span>
             </div>
@@ -250,10 +249,10 @@
                   <span class="input-group-text"><i class="fa fa-briefcase"></i></span>
                 </div>
                 <select class="form-control" id="chucvu">
-                  <option>Chọn chức vụ</option>
-                  <option>Sếp</option>
-                  <option>Trưởng phòng</option>
-                  <option>Nhân viên</option>
+                  <option>Select position</option>
+                  <option>Supervisor</option>
+                  <option>Manager</option>
+                  <option>Staff</option>
                 </select>
               </div>
 
@@ -266,9 +265,9 @@
 
         <!-- Modal footer -->
         <div class="modal-footer" id="modal-footer">
-          <button id="btnThemNV" type="button" class="btn btn-success">Thêm người dùng</button>
-          <button id="btnCapNhat" type="button" class="btn btn-success">Cập nhật</button>
-          <button id="btnDong" type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+          <button id="btnThemNV" type="button" class="btn btn-success">Add</button>
+          <button id="btnCapNhat" type="button" class="btn btn-success">Update</button>
+          <button id="btnDong" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
 
       </div>
@@ -286,11 +285,10 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="js/datepicker.js"></script>
 
-  <!-- Wow -->
-  <!-- <script src="js/wow.min.js"></script>	
-	<script>
-		new WOW().init();
-	</script>  -->
+  <!-- My Javascript -->
+  <script src="js/ES6/Employee.js"></script>
+  <script src="js/ES6/Company.js"></script>
+  <script src="js/ES6/Main.js"></script>
 
   <!-- <script src="js/modal.js"></script> -->
   <script type="text/javascript">
@@ -300,6 +298,8 @@
       });
     });
   </script>
+
+ 
 </body>
 
 </html>
