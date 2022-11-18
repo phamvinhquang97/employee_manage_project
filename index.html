@@ -24,6 +24,9 @@
   <link rel="stylesheet" href="css/style4.css">
 
   <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <!-- Sweet CDN -->
+  
 </head>
 
 <body>
@@ -113,7 +116,7 @@
                 <h3 class="text-left text-primary font-weight-bold">Employee List </h3>
               </div>
               <div class="col-md-6 text-right">
-                <button class="btn btn-primary" id="btnThem" data-toggle="modal" data-target="#myModal">Add New Employee</button>
+                <button class="btn btn-primary" id="addNewEmployeeButton" data-toggle="modal" data-target="#myModal">Add New Employee</button>
                 <!-- <button class="btn btn-info" id="btnLuuLS">Lưu LS</button>
                 <button class="btn btn-info" id="btnLayLS">Lấy LS</button> -->
               </div>
@@ -146,7 +149,7 @@
                   <th>Email</th>
                   <th>Date Start</th>
                   <th>Position</th>
-                  <th>Amount of Salary</th>
+                  <!-- <th>Amount of Salary</th> -->
                   <th><em class="fa fa-cog"></em></th>
                 </tr>
               </thead>
@@ -225,7 +228,7 @@
               <span class="sp-thongbao" id="tbEmail"></span>
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fa fa-key"></i></span>
@@ -234,7 +237,7 @@
                   placeholder="Password">
               </div>
               <span class="sp-thongbao" id="tbMatKhau"></span>
-            </div>
+            </div> -->
 
             <div class="form-group">
               <div class="input-group">
@@ -289,6 +292,9 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="js/datepicker.js"></script>
 
+  <!-- Sweet CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
   <!-- My Javascript -->
   <script src="js/ES6/Employee.js"></script>
   <script src="js/ES6/Company.js"></script>
@@ -307,3 +313,4 @@
 </body>
 
 </html>
+

@@ -1,12 +1,12 @@
 var newEmployee1 = new Employee("abc", " Tim John", "john@gmail.com", "10/11/2022", "Staff" );
 var newEmployee2 = new Employee("bcd", "Jack Denials", "jack@gmail.com","10/12/2022", "Manager");
 var newEmployee1_1 = new Employee("abc", "Jim", "jack@gmail.com", "10/11/2022", "Staff");
-var newCompany = new Company();
-newCompany.addNewEmployee(newEmployee1);
-newCompany.addNewEmployee(newEmployee2);
+var company = new Company();
+company.addNewEmployee(newEmployee1);
+company.addNewEmployee(newEmployee2);
 
 // Pop-up form : Add new employee and edit employee details
-popUpForm = (modal_title, readonly, type) => {
+popUpForm = (modal_title, readonly = false, type = 1) => {
     // type = 1 : Add new employee
     // type = 2 : Edit employee details
 
@@ -78,12 +78,52 @@ displayEmployeeList = (employeeList) => {
         tbody.appendChild(tr);
 
         //  create <td> - take all of employee value and add it to <td>
-        for(let j=0; j < employeeList[i].compareArray.length; j++){
+        for(let j=0; j < employee.compareArray.length; j++){
             td = document.createElement('td');
             td.innerHTML = employeeList[i].compareArray[j];
             tr.appendChild(td);
         }
+        // let edit = '<a class="btn btn-primary text-white" data-toggle="modal" href="myModal" id="edit_"'+ employee.employeeID + '> <en class="fa fa-pencil"></en></a>'
+        // Create edit and delete button for each row
+        let editButton = `<a class="btn btn-primary text-white" data-toggle="modal" href="#myModal" id="edit_${employee.employeeID}"> <en class="fa fa-pencil"></en></a>`;
+        let deleteButton = `<a class="btn btn-danger text-white ml-2" id="delete_${employee.employeeID}"> <en class="fa fa-trash"></en></a>`;
+        // Display the edit and delete button for each row.
+        td = document.createElement('td');
+        td.innerHTML = editButton + deleteButton;
+        td.setAttribute("align", "center");
+        tr.appendChild(td);
+
+        // Add event for editButton and deleteButton
+
+
+
     }
 
-
 }
+
+// Add new employee button.
+document.getElementById("addNewEmployeeButton").addEventListener("click", () => { 
+    // reset the form
+    deleteForm();
+    popUpForm("Add New Employee");
+
+})
+
+document.getElementById("addButton").addEventListener("click", () => {
+    // Validation
+
+    let employeeID = document.getElementById("employeeID").value;
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let startDate = document.getElementById("datepicker").value;
+    let position = document.getElementById("position").value;
+
+
+    let newEmployee = new Employee(employeeID, name, email, startDate, position);
+    company.addNewEmployee(newEmployee);
+    swal("Successful Add!", "The employee list has been update", "success");
+    
+    // Display Employee List
+    displayEmployeeList(company.employeeList);
+})
+
