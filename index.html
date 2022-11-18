@@ -132,6 +132,8 @@
                 </div>
               </div>
             </div>
+
+            <!-- Table SHOW EMPLOYEE DETAIL -->
             <table class="table table-bordered table-hover myTable">
               <thead class="text-primary">
                 <tr>
@@ -148,16 +150,18 @@
                   <th><em class="fa fa-cog"></em></th>
                 </tr>
               </thead>
-              <tbody id="tableDanhSach">
+              <tbody id="tableEmployeeList">
 
               </tbody>
             </table>
+
+            <!-- END TABLE  -->
           </div>
 
           <!-- Footer -->
           <div class="card-footer myCardFooter">
             <nav>
-              <ul class="pagination justify-content-center" id="ulPhanTrang">
+              <ul class="pagination justify-content-center" id="ulDividePage">
 
               </ul>
             </nav>
@@ -194,7 +198,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fa fa-user"></i></span>
                 </div>
-                <input type="msnv" name="msnv" id="msnv" class="form-control input-sm" placeholder="Employee ID">
+                <input type="employeeID" name="employeeID" id="employeeID" class="form-control input-sm" placeholder="Employee ID">
               </div>
 
               <span class="sp-thongbao" id="tbMaNV"></span>
@@ -248,7 +252,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fa fa-briefcase"></i></span>
                 </div>
-                <select class="form-control" id="chucvu">
+                <select class="form-control" id="position">
                   <option>Select position</option>
                   <option>Supervisor</option>
                   <option>Manager</option>
@@ -265,9 +269,9 @@
 
         <!-- Modal footer -->
         <div class="modal-footer" id="modal-footer">
-          <button id="btnThemNV" type="button" class="btn btn-success">Add</button>
-          <button id="btnCapNhat" type="button" class="btn btn-success">Update</button>
-          <button id="btnDong" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button id="addButton" type="button" class="btn btn-success">Add</button>
+          <button id="editButton" type="button" class="btn btn-success">Update</button>
+          <button id="closeButton" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
 
       </div>
