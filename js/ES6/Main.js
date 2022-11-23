@@ -69,7 +69,7 @@ displayEmployeeList = (employeeList) => {
         endPage = numberOfEmployees;
     }
 
-    // display all of employe
+    // display all of employee
     for(let i = startPage; i <= endPage; i++){
         employee = employeeList[i];
         
@@ -94,6 +94,7 @@ displayEmployeeList = (employeeList) => {
         tr.appendChild(td);
 
         // Add event for editButton and deleteButton
+        editEmployeeDetail("edit_" + employee.employeeID)
 
 
 
@@ -109,6 +110,7 @@ document.getElementById("addNewEmployeeButton").addEventListener("click", () => 
 
 })
 
+// Function for addButton.
 document.getElementById("addButton").addEventListener("click", () => {
     // Validation
 
@@ -123,7 +125,45 @@ document.getElementById("addButton").addEventListener("click", () => {
     company.addNewEmployee(newEmployee);
     swal("Successful Add!", "The employee list has been update", "success");
     
-    // Display Employee List
+    // Display Employee List after add new employee
     displayEmployeeList(company.employeeList);
 })
 
+
+// Function for editButton.
+editEmployeeDetail = (idButton) => {
+    document.getElementById(idButton).addEventListener("click", () => {
+        let id = idButton;
+        // the idButton = "edit_id"
+        let arrayEdit_ID = id.split("_");
+        // arrayEdit_ID = [edit], [employeeID]
+        let employeeID = arrayEdit_ID[1];
+
+        let employee = company.findEmployeeBasedEmployeeID(employeeID);
+
+        document.getElementById("employeeID").value = employeeID;
+        document.getElementById("name").value = employee.name;
+        document.getElementById("email").value = employee.email;
+        document.getElementById("datepicker").value = employee.startingDate;
+        document.getElementById("position").value = employee.position;
+
+
+        popUpForm("Update Employee Detail", true, 2);
+        
+    })
+}
+
+document.getElementById("editButton").addEventListener("click", () =>{
+    let employeeID = document.getElementById("employeeID").value;
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let startDate = document.getElementById("datepicker").value;
+    let position = document.getElementById("position").value;
+
+    let newEmpployeeInfo = new Employee(employeeID, name, email, startDate, position);
+    company.editEmployee(newEmpployeeInfo);
+
+    swal("Successful Update New Employee Detail!", "The employee list has been update", "success");
+    // display new employee list after edit employee detail.
+    displayEmployeeList(company.employeeList);
+})

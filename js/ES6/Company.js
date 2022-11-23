@@ -24,7 +24,7 @@ class Company{
     }
 
     // Find employee based on employeeID -> return location employee in employeeList
-    findEmployeeInEmployeeList(employeeID){
+    findEmployeeBasedEmployeeID(employeeID){
         for(let index in this.employeeList){
             if(this.employeeList[index].employeeID === employeeID){
                 return this.employeeList[index];
@@ -41,6 +41,7 @@ class Company{
 
     // Edit employee detail - Find index employee in employeeList -> edit detail
     editEmployee(employee){
+        // find index of employee. 
         let indexInEmployeeList = this.findIndexEmployeeInEmployeeList(employee.employeeID);
         this.employeeList[indexInEmployeeList] = employee;
     }
