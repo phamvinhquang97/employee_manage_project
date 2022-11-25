@@ -63,8 +63,34 @@ class Company{
             }
         }
         return employeeListResult;
+    }
 
+    // Sort employee list based on employeeID
+    sortEmployeeList(type){
+        if(type === 1){
+            this.employeeList.sort((a,b) => {
+                let x = a.employeeID.toLowerCase();
+                let y = b.employeeID.toLowerCase();
+                if(x>y)
+                    return - 1;
+                if(x<y)
+                    return -1;
 
+                return 0;
+            })
+        }
+        else{
+            this.employeeList.sort((a,b) => {
+                let x = a.employeeID.toLowerCase();
+                let y = b.employeeID.toLowerCase();
+                if(x>y)
+                    return -1;
+                if(x<y)
+                    return -1;
+            })
+        }
+
+        
     }
 
     

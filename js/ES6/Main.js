@@ -1,9 +1,15 @@
 var newEmployee1 = new Employee("abc", " Tim John", "john@gmail.com", "10/11/2022", "Staff" );
 var newEmployee2 = new Employee("bcd", "Jack Denials", "jack@gmail.com","10/12/2022", "Manager");
 var newEmployee1_1 = new Employee("abc", "Jim", "jack@gmail.com", "10/11/2022", "Staff");
+var newEmployee3 = new Employee("bcd", "Jack Denials", "jack@gmail.com","10/12/2022", "Manager");
+var newEmployee4 = new Employee("bcd", "Jack Denials", "jack@gmail.com","10/12/2022", "Manager");
+var newEmployee5 = new Employee("bcd", "Jack Denials", "jack@gmail.com","10/12/2022", "Manager");
 var company = new Company();
 company.addNewEmployee(newEmployee1);
 company.addNewEmployee(newEmployee2);
+company.addNewEmployee(newEmployee3);
+company.addNewEmployee(newEmployee4);
+company.addNewEmployee(newEmployee5);
 
 // Pop-up form : Add new employee and edit employee details
 popUpForm = (modal_title, readonly = false, type = 1) => {
@@ -45,21 +51,25 @@ displayEmployeeList = (employeeList) => {
 
     let numberOfEmployees = employeeList.length;
     let employee, tr, td;
-    let ulDividePage = document.createElement("ulDividePage");
+    let ulDividePage = document.getElementById("ulDividePage");
     ulDividePage.innerHTML = ""; // reset
 
     let numberOfLineInPage = 2;
     let numberOfPage = Math.ceil(numberOfEmployees / numberOfLineInPage);
 
     for(let i = 1; i <= numberOfPage; i++){
-        let li = document.createElement("li");
+        let li = document.createElement('li');
         ulDividePage.appendChild(li);
 
-        let a = document.createElement("a");
+        let a = document.createElement('a');
         a.setAttribute("class", "page-link");
         a.setAttribute("id", "page_" + i);
         a.innerHTML = i;
         li.appendChild(a);
+
+        // calling page turning function
+        pageTurning("page_" + i);
+
     }
 
     let startPage = (currentPage - 1)*numberOfLineInPage;
@@ -95,6 +105,7 @@ displayEmployeeList = (employeeList) => {
 
         // Add event for pencil_editButton and deleteButton 
         editEmployeeDetail("edit_" + employee.employeeID);
+        
 
 
     }
@@ -171,3 +182,47 @@ document.getElementById("updateButton").addEventListener("click", () =>{
     // display new employee list after edit employee detail.
     displayEmployeeList(company.employeeList);
 })
+
+
+// FUNCTION - enter the name in "Search Bar" and find employee.
+document.getElementById("searchName").addEventListener("keyup", () => {
+    let searchName = document.getElementById("searchName").value;
+    // return employeeListResult - new company object.
+    let employeeListResult = company.findEmployeeBasedOnName(searchName);
+    displayEmployeeList(employeeListResult.employeeList);
+})
+
+// FUNCTION - Ascending sorting employee list.
+document.getElementById("ascOrder").addEventListener("click", () => {
+    // hide "ascOrder" button and display "descOrder" button
+    document.getElementById("ascOrder").style.display = "none";
+    document.getElementById("descOrder").style.display = "inline";
+    company.sortEmployeeList(1);
+    // display employeeList after "Ascending" sort
+    displayEmployeeList(company.employeeList);
+    
+})
+
+// FUNCTION - Descending sorting employee list
+document.getElementById("descOrder").addEventListener("click", () => {
+    // hide "descOrder" button and display "ascOrder" button
+    document.getElementById("ascOrder").style.display = "inline";
+    document.getElementById("descOrder").style.display = "none";
+    company.sortEmployeeList(-1);
+    // display employeeList after "Descending" sort
+    displayEmployeeList(company.employeeList);
+    
+})
+
+
+// FUNCTION - page turing.
+pageTurning = (idButton) => {
+    document.getElementById(idButton).addEventListener("click", () => {
+        let id = idButton;
+        let splitidButtonArray = id.split("_");
+        currentPage = splitidButtonArray[1];
+        displayEmployeeList(company.employeeList);    
+    })
+}
+
+displayEmployeeList(company.employeeList);
