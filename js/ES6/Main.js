@@ -17,11 +17,11 @@ popUpForm = (modal_title, readonly = false, type = 1) => {
     switch (type){
         case 1: // add new employee
             document.getElementById("addButton").style.display = "block";
-            document.getElementById("editButton").style.display = "none";
+            document.getElementById("updateButton").style.display = "none";
             break;
         case 2: // edit employee details
             document.getElementById("addButton").style.display = "none";
-            document.getElementById("editButton").style.display = "block";
+            document.getElementById("updateButton").style.display = "block";
             break;
     }
 }
@@ -93,16 +93,15 @@ displayEmployeeList = (employeeList) => {
         td.setAttribute("align", "center");
         tr.appendChild(td);
 
-        // Add event for editButton and deleteButton
-        editEmployeeDetail("edit_" + employee.employeeID)
-
+        // Add event for pencil_editButton and deleteButton 
+        editEmployeeDetail("edit_" + employee.employeeID);
 
 
     }
 
 }
 
-// Add new employee button.
+// FUCNTION - handle envent "Add New Employee" button
 document.getElementById("addNewEmployeeButton").addEventListener("click", () => { 
     // reset the form
     deleteForm();
@@ -110,7 +109,7 @@ document.getElementById("addNewEmployeeButton").addEventListener("click", () => 
 
 })
 
-// Function for addButton.
+// FUNCTION - handle event "Add" button in modal form.
 document.getElementById("addButton").addEventListener("click", () => {
     // Validation
 
@@ -130,17 +129,18 @@ document.getElementById("addButton").addEventListener("click", () => {
 })
 
 
-// Function for editButton.
+// FUNCTION - handle event "pencil_editButton".
 editEmployeeDetail = (idButton) => {
     document.getElementById(idButton).addEventListener("click", () => {
         let id = idButton;
-        // the idButton = "edit_id"
+        // the idButton = "edit_employee.EmployeeID"
         let arrayEdit_ID = id.split("_");
         // arrayEdit_ID = [edit], [employeeID]
         let employeeID = arrayEdit_ID[1];
 
+        // find employee detail based on employeeID
         let employee = company.findEmployeeBasedEmployeeID(employeeID);
-
+        // pass all of the employee detail to the form.
         document.getElementById("employeeID").value = employeeID;
         document.getElementById("name").value = employee.name;
         document.getElementById("email").value = employee.email;
@@ -153,14 +153,18 @@ editEmployeeDetail = (idButton) => {
     })
 }
 
-document.getElementById("editButton").addEventListener("click", () =>{
-    let employeeID = document.getElementById("employeeID").value;
-    let name = document.getElementById("name").value;
-    let email = document.getElementById("email").value;
-    let startDate = document.getElementById("datepicker").value;
-    let position = document.getElementById("position").value;
+// FUCNTION - handle event "Update" button in modal form
+document.getElementById("updateButton").addEventListener("click", () =>{
 
-    let newEmpployeeInfo = new Employee(employeeID, name, email, startDate, position);
+    // add new employee information
+    let employeeID = document.getElementById("employeeID").value;
+    let nameNewInfo = document.getElementById("name").value;
+    let emailNewInfo = document.getElementById("email").value;
+    let startDateNewInfor = document.getElementById("datepicker").value;
+    let positionNewInfor = document.getElementById("position").value;
+
+    let newEmpployeeInfo = new Employee(employeeID, nameNewInfo, emailNewInfo, startDateNewInfor, positionNewInfor);
+    // update employee information.
     company.editEmployee(newEmpployeeInfo);
 
     swal("Successful Update New Employee Detail!", "The employee list has been update", "success");
