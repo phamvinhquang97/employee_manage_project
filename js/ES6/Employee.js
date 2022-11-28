@@ -13,7 +13,6 @@ class Employee{
         // this.password = password;
         this.startingDate = startingDate;
         this.position = position;
-
         this.compareArray = [this.employeeID, this.name, this.email, this.startingDate, this.position];
 
     }

@@ -1,34 +1,43 @@
-var newEmployee1 = new Employee("abc", " Tim John", "john@gmail.com", "10/11/2022", "Staff" );
-var newEmployee2 = new Employee("bcd", "Jack Denials", "jack@gmail.com","10/12/2022", "Manager");
-var newEmployee1_1 = new Employee("abc", "Jim", "jack@gmail.com", "10/11/2022", "Staff");
-var newEmployee3 = new Employee("bcd", "Jack Denials", "jack@gmail.com","10/12/2022", "Manager");
-var newEmployee4 = new Employee("bcd", "Jack Denials", "jack@gmail.com","10/12/2022", "Manager");
-var newEmployee5 = new Employee("bcd", "Jack Denials", "jack@gmail.com","10/12/2022", "Manager");
 var company = new Company();
-company.addNewEmployee(newEmployee1);
-company.addNewEmployee(newEmployee2);
-company.addNewEmployee(newEmployee3);
-company.addNewEmployee(newEmployee4);
-company.addNewEmployee(newEmployee5);
+
+// localStorage ("string") -> ("object") passed to company.employeeList -> display it.
+
+// store the data in localStorage
+storeEmployeeListDataInLocalStorage = (employeeList) => {
+    // convert employeeList to JSON type.
+    var employeeListDataInJSON = JSON.stringify(employeeList);
+    // set it in localStorage 
+    localStorage.setItem('EmployeeList', employeeListDataInJSON);
+}
+
+// get the data from localStorage -> pass it to employeeList
+getEmployeeListDataInLocalStorage = () => {
+    var employeeListDataInString = localStorage.getItem('EmployeeList');
+    var employeeListInObject = JSON.parse(employeeListDataInString);
+    company.employeeList = employeeListInObject;
+    // displayEmployeeList(company.employeeList);
+}
+
+
 
 // Pop-up form : Add new employee and edit employee details
 popUpForm = (modal_title, readonly = false, type = 1) => {
     // type = 1 : Add new employee
     // type = 2 : Edit employee details
-
+    
     document.getElementById("header-title").innerHTML = modal_title;
     document.getElementById("employeeID").readOnly = readonly;
-
-
+    
+    
     switch (type){
         case 1: // add new employee
-            document.getElementById("addButton").style.display = "block";
-            document.getElementById("updateButton").style.display = "none";
-            break;
+        document.getElementById("addButton").style.display = "block";
+        document.getElementById("updateButton").style.display = "none";
+        break;
         case 2: // edit employee details
-            document.getElementById("addButton").style.display = "none";
-            document.getElementById("updateButton").style.display = "block";
-            break;
+        document.getElementById("addButton").style.display = "none";
+        document.getElementById("updateButton").style.display = "block";
+        break;
     }
 }
 
@@ -37,15 +46,16 @@ deleteForm = () => {
     let elements = document.getElementsByClassName("input-sm");
     for(let element of elements){
         element.value = "";
-
+        
     }
-
+    
     document.getElementById("position").selectedIndex = 0;
 }
 
-// Devide the page and display all of employee.
+// FUNCTION - display all of employee in employee list
 let currentPage = 1;
 displayEmployeeList = (employeeList) => {
+
     let tbody = document.getElementById("tableEmployeeList");
     tbody.innerHTML = ""; // reset table
 
@@ -73,20 +83,20 @@ displayEmployeeList = (employeeList) => {
     }
 
     let startPage = (currentPage - 1)*numberOfLineInPage;
-    let endPage = currentPage *numberOfLineInPage;
+    let endPage = currentPage * numberOfLineInPage;
     
     if(numberOfEmployees < endPage){
         endPage = numberOfEmployees;
     }
 
     // display all of employee
-    for(let i = startPage; i <= endPage; i++){
+    for(let i = startPage; i < endPage; i++){
+        console.log(employeeList[i].employeeID);
         employee = employeeList[i];
-        
         // create the row for table
         tr = document.createElement('tr');
         tbody.appendChild(tr);
-
+        // console.log(employee.employeeID);s
         //  create <td> - take all of employee value and add it to <td>
         for(let j=0; j < employee.compareArray.length; j++){
             td = document.createElement('td');
@@ -105,6 +115,10 @@ displayEmployeeList = (employeeList) => {
 
         // Add event for pencil_editButton and deleteButton 
         editEmployeeDetail("edit_" + employee.employeeID);
+        updateButton();
+
+        // Add event for "delete" Button
+        deleteEmployee("delete_"+ employee.employeeID);
         
 
 
@@ -116,6 +130,10 @@ displayEmployeeList = (employeeList) => {
 document.getElementById("addNewEmployeeButton").addEventListener("click", () => { 
     // reset the form
     deleteForm();
+    // Create unquieID for EmployeeID
+    employeeIDCreator =  Math.random().toString(36).substr(2, 4);
+    document.getElementById("employeeID").placeholder = employeeIDCreator;
+
     popUpForm("Add New Employee");
 
 })
@@ -123,8 +141,7 @@ document.getElementById("addNewEmployeeButton").addEventListener("click", () => 
 // FUNCTION - handle event "Add" button in modal form.
 document.getElementById("addButton").addEventListener("click", () => {
     // Validation
-
-    let employeeID = document.getElementById("employeeID").value;
+    let employeeID = employeeIDCreator;
     let name = document.getElementById("name").value;
     let email = document.getElementById("email").value;
     let startDate = document.getElementById("datepicker").value;
@@ -135,6 +152,7 @@ document.getElementById("addButton").addEventListener("click", () => {
     company.addNewEmployee(newEmployee);
     swal("Successful Add!", "The employee list has been update", "success");
     
+    storeEmployeeListDataInLocalStorage(company.employeeList);
     // Display Employee List after add new employee
     displayEmployeeList(company.employeeList);
 })
@@ -158,30 +176,68 @@ editEmployeeDetail = (idButton) => {
         document.getElementById("datepicker").value = employee.startingDate;
         document.getElementById("position").value = employee.position;
 
-
         popUpForm("Update Employee Detail", true, 2);
         
     })
 }
 
 // FUCNTION - handle event "Update" button in modal form
-document.getElementById("updateButton").addEventListener("click", () =>{
+updateButton = () => {
+        document.getElementById("updateButton").addEventListener("click", () =>{
 
-    // add new employee information
-    let employeeID = document.getElementById("employeeID").value;
-    let nameNewInfo = document.getElementById("name").value;
-    let emailNewInfo = document.getElementById("email").value;
-    let startDateNewInfor = document.getElementById("datepicker").value;
-    let positionNewInfor = document.getElementById("position").value;
+        // add new employee information
+        let employeeID = document.getElementById("employeeID").value;
+        let nameNewInfo = document.getElementById("name").value;
+        let emailNewInfo = document.getElementById("email").value;
+        let startDateNewInfor = document.getElementById("datepicker").value;
+        let positionNewInfor = document.getElementById("position").value;
 
-    let newEmpployeeInfo = new Employee(employeeID, nameNewInfo, emailNewInfo, startDateNewInfor, positionNewInfor);
-    // update employee information.
-    company.editEmployee(newEmpployeeInfo);
+        let newEmpployeeInfo = new Employee(employeeID, nameNewInfo, emailNewInfo, startDateNewInfor, positionNewInfor);
+        // update employee information.
+        company.editEmployee(newEmpployeeInfo);
 
-    swal("Successful Update New Employee Detail!", "The employee list has been update", "success");
-    // display new employee list after edit employee detail.
-    displayEmployeeList(company.employeeList);
-})
+        swal("Successful Update New Employee Detail!", "The employee list has been update", "success");
+        // Update the employeeList to localStorage
+        storeEmployeeListDataInLocalStorage(company.employeeList);
+        // display new employee list after edit employee detail.
+        displayEmployeeList(company.employeeList);
+    })
+}
+
+// FUNCTION - handle "Delete" button for each row
+deleteEmployee = (idButton) => {
+    document.getElementById(idButton).addEventListener("click",()=>{
+        let id = idButton;
+        let arrayDelete_ID = id.split("_");
+        let employeeID = arrayDelete_ID[1];
+
+        company.deleteEmployee(employeeID);
+
+        // Alert for delete record.
+        swal({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire(
+                'Deleted!',
+                'Employee record has been deleted.',
+                'success'
+              )
+            }
+          })
+        // Update the data to localStorage
+        storeEmployeeListDataInLocalStorage(company.employeeList);
+        // Display Employee List after deleted
+        displayEmployeeList(company.employeeList);
+
+    })
+}
 
 
 // FUNCTION - enter the name in "Search Bar" and find employee.
@@ -215,7 +271,7 @@ document.getElementById("descOrder").addEventListener("click", () => {
 })
 
 
-// FUNCTION - page turing.
+// FUNCTION - page turing <1>, <2>,<3>.
 pageTurning = (idButton) => {
     document.getElementById(idButton).addEventListener("click", () => {
         let id = idButton;
@@ -225,4 +281,6 @@ pageTurning = (idButton) => {
     })
 }
 
+// Load Display the data from localStorage.
+getEmployeeListDataInLocalStorage();
 displayEmployeeList(company.employeeList);
