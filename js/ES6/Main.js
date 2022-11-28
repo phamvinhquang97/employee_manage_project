@@ -65,7 +65,7 @@ displayEmployeeList = (employeeList) => {
     let ulDividePage = document.getElementById("ulDividePage");
     ulDividePage.innerHTML = ""; // reset
 
-    let numberOfLineInPage = 2;
+    let numberOfLineInPage = 5;
     let numberOfPage = Math.ceil(numberOfEmployees / numberOfLineInPage);
 
     for(let i = 1; i <= numberOfPage; i++){
@@ -156,6 +156,14 @@ document.getElementById("addButton").addEventListener("click", () => {
     updateEmployeeListDataInLocalStorage(company.employeeList);
     // Display Employee List after add new employee
     displayEmployeeList(company.employeeList);
+    // delete the form after "add the employee"
+    deleteForm();
+    // Create new unquieID for EmployeeID
+    employeeIDCreator =  Math.random().toString(36).substr(2, 4);
+    document.getElementById("employeeID").placeholder = employeeIDCreator;
+
+    
+    
 })
 
 
@@ -208,34 +216,37 @@ updateButton = () => {
 // FUNCTION - handle "Delete" button for each row
 deleteEmployee = (idButton) => {
     document.getElementById(idButton).addEventListener("click",()=>{
-        let id = idButton;
-        let arrayDelete_ID = id.split("_");
-        let employeeID = arrayDelete_ID[1];
-
-        company.deleteEmployee(employeeID);
-
-        // Alert for delete record.
         swal({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
             icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire(
-                'Deleted!',
-                'Employee record has been deleted.',
-                'success'
-              )
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) =>{
+            // if the user accept to delete the record
+            if(willDelete){
+                let id = idButton;
+                let arrayDelete_ID = id.split("_");
+                let employeeID = arrayDelete_ID[1];
+
+                company.deleteEmployee(employeeID);
+                // Update the data to localStorage
+                updateEmployeeListDataInLocalStorage(company.employeeList);
+                // Display Employee List after deleted
+                displayEmployeeList(company.employeeList);
+
+                swal("Your file has been deleted.",{
+                    icon: "success",
+                });
+
+            }else{
+                swal("Cancelled", "This record still in your data!","error");
             }
-          })
-        // Update the data to localStorage
-        updateEmployeeListDataInLocalStorage(company.employeeList);
-        // Display Employee List after deleted
-        displayEmployeeList(company.employeeList);
+
+        })
+
+
 
     })
 }
@@ -282,8 +293,15 @@ pageTurning = (idButton) => {
     })
 }
 
-// Create the local Storge object for store the data.
-localStorage.setItem('EmployeeList', []);
-// Load Display the data from localStorage.
-getEmployeeListDataInLocalStorage();
-displayEmployeeList(company.employeeList);
+
+if(localStorage.length == 0){
+    // create the "key" and "value" on localStorage
+    localStorage.setItem('EmployeeList', []);
+    
+}
+else{
+    // load the data from localStorage
+    getEmployeeListDataInLocalStorage();
+    // Display the data from localStorage.
+    displayEmployeeList(company.employeeList);
+}
