@@ -1,9 +1,10 @@
+employee1 = new Employee("123","Vinh","phamvinhquang77@gmail.com","20/10/2020","Staff");
 var company = new Company();
 
 // localStorage ("string") -> ("object") passed to company.employeeList -> display it.
 
 // store the data in localStorage
-storeEmployeeListDataInLocalStorage = (employeeList) => {
+updateEmployeeListDataInLocalStorage = (employeeList) => {
     // convert employeeList to JSON type.
     var employeeListDataInJSON = JSON.stringify(employeeList);
     // set it in localStorage 
@@ -152,7 +153,7 @@ document.getElementById("addButton").addEventListener("click", () => {
     company.addNewEmployee(newEmployee);
     swal("Successful Add!", "The employee list has been update", "success");
     
-    storeEmployeeListDataInLocalStorage(company.employeeList);
+    updateEmployeeListDataInLocalStorage(company.employeeList);
     // Display Employee List after add new employee
     displayEmployeeList(company.employeeList);
 })
@@ -198,7 +199,7 @@ updateButton = () => {
 
         swal("Successful Update New Employee Detail!", "The employee list has been update", "success");
         // Update the employeeList to localStorage
-        storeEmployeeListDataInLocalStorage(company.employeeList);
+        updateEmployeeListDataInLocalStorage(company.employeeList);
         // display new employee list after edit employee detail.
         displayEmployeeList(company.employeeList);
     })
@@ -232,7 +233,7 @@ deleteEmployee = (idButton) => {
             }
           })
         // Update the data to localStorage
-        storeEmployeeListDataInLocalStorage(company.employeeList);
+        updateEmployeeListDataInLocalStorage(company.employeeList);
         // Display Employee List after deleted
         displayEmployeeList(company.employeeList);
 
@@ -281,6 +282,8 @@ pageTurning = (idButton) => {
     })
 }
 
+// Create the local Storge object for store the data.
+localStorage.setItem('EmployeeList', []);
 // Load Display the data from localStorage.
 getEmployeeListDataInLocalStorage();
 displayEmployeeList(company.employeeList);
