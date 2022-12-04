@@ -1,5 +1,9 @@
-employee1 = new Employee("123","Vinh","phamvinhquang77@gmail.com","20/10/2020","Staff");
+// employee1 = new Employee("123","Vinh","phamvinhquang77@gmail.com","20/10/2020","Staff");
 var company = new Company();
+
+
+
+
 
 // localStorage ("string") -> ("object") passed to company.employeeList -> display it.
 
@@ -40,6 +44,14 @@ popUpForm = (modal_title, readonly = false, type = 1) => {
         document.getElementById("updateButton").style.display = "block";
         break;
     }
+}
+
+// reset errorMessage if the user enter invalid before
+resetErrorMessage = () =>{
+    document.getElementById("errorMessageName").style.display = "none";
+    document.getElementById("errorMessageEmail").style.display = "none";
+    document.getElementById("errorMessagePosition").style.display = "none";
+
 }
 
 // reset form
@@ -128,9 +140,13 @@ displayEmployeeList = (employeeList) => {
 }
 
 // FUCNTION - handle envent "Add New Employee" button
-document.getElementById("addNewEmployeeButton").addEventListener("click", () => { 
+document.getElementById("addNewEmployeeButton").addEventListener("click", () => {
+    // Create new unquieID for EmployeeID
+    employeeIDCreator =  Math.random().toString(36).substr(2, 4);
+    document.getElementById("employeeID").placeholder = employeeIDCreator; 
     // reset the form
     deleteForm();
+    resetErrorMessage();
     // Create unquieID for EmployeeID
     employeeIDCreator =  Math.random().toString(36).substr(2, 4);
     document.getElementById("employeeID").placeholder = employeeIDCreator;
@@ -141,6 +157,7 @@ document.getElementById("addNewEmployeeButton").addEventListener("click", () => 
 
 // FUNCTION - handle event "Add" button in modal form.
 document.getElementById("addButton").addEventListener("click", () => {
+    
     // Validation
     let employeeID = employeeIDCreator;
     let name = document.getElementById("name").value;
@@ -149,20 +166,29 @@ document.getElementById("addButton").addEventListener("click", () => {
     let position = document.getElementById("position").value;
 
 
-    let newEmployee = new Employee(employeeID, name, email, startDate, position);
-    company.addNewEmployee(newEmployee);
-    swal("Successful Add!", "The employee list has been update", "success");
-    
-    updateEmployeeListDataInLocalStorage(company.employeeList);
-    // Display Employee List after add new employee
-    displayEmployeeList(company.employeeList);
-    // delete the form after "add the employee"
-    deleteForm();
-    // Create new unquieID for EmployeeID
-    employeeIDCreator =  Math.random().toString(36).substr(2, 4);
-    document.getElementById("employeeID").placeholder = employeeIDCreator;
+    // Create the Validation object
+    var validation = new Validation();
 
-    
+    // Check user input name
+    validation.isValid &= validation.isNotEmpty(name,"errorMessageName", "Please enter your name." );
+    validation.isValid &= validation.isValidInput(name,"errorMessageName", "Please input valid value.")
+    validation.isValid &= validation.isEmailInputValid(email, "errorMessageEmail", "Please enter employee email." );
+    validation.isValid &= validation.isPositionSelected("position", "errorMessagePosition", "Please select one employee position.");
+
+    if(validation.isValid){
+        let newEmployee = new Employee(employeeID, name, email, startDate, position);
+        company.addNewEmployee(newEmployee);
+        swal("Successful Add!", "The employee list has been update", "success");
+        
+        updateEmployeeListDataInLocalStorage(company.employeeList);
+        // Display Employee List after add new employee
+        displayEmployeeList(company.employeeList);
+        // delete the form after "add the employee"
+        deleteForm();
+    }
+    // Create new unquieID for EmployeeID
+    // employeeIDCreator =  Math.random().toString(36).substr(2, 4);
+    // document.getElementById("employeeID").placeholder = employeeIDCreator;
     
 })
 
@@ -185,14 +211,18 @@ editEmployeeDetail = (idButton) => {
         document.getElementById("datepicker").value = employee.startingDate;
         document.getElementById("position").value = employee.position;
 
+        // Display the pop-up form.
         popUpForm("Update Employee Detail", true, 2);
+        // Reset the message if update is unvalid.
+        resetErrorMessage();
         
     })
 }
 
 // FUCNTION - handle event "Update" button in modal form
 updateButton = () => {
-        document.getElementById("updateButton").addEventListener("click", () =>{
+    document.getElementById("updateButton").addEventListener("click", () =>{
+        // resetErrorMessage();
 
         // add new employee information
         let employeeID = document.getElementById("employeeID").value;
@@ -201,15 +231,25 @@ updateButton = () => {
         let startDateNewInfor = document.getElementById("datepicker").value;
         let positionNewInfor = document.getElementById("position").value;
 
-        let newEmpployeeInfo = new Employee(employeeID, nameNewInfo, emailNewInfo, startDateNewInfor, positionNewInfor);
-        // update employee information.
-        company.editEmployee(newEmpployeeInfo);
+        var validation = new Validation();
+        validation.isValid = true;
+        // Check user input name
+        validation.isValid &= validation.isNotEmpty(nameNewInfo,"errorMessageName", "Please enter your name." );
+        validation.isValid &= validation.isValidInput(nameNewInfo,"errorMessageName", "Please input valid value.")
+        validation.isValid &= validation.isEmailInputValid(emailNewInfo, "errorMessageEmail", "Please enter employee email." );
+        validation.isValid &= validation.isPositionSelected("position", "errorMessagePosition", "Please select one employee position.");
 
-        swal("Successful Update New Employee Detail!", "The employee list has been update", "success");
-        // Update the employeeList to localStorage
-        updateEmployeeListDataInLocalStorage(company.employeeList);
-        // display new employee list after edit employee detail.
-        displayEmployeeList(company.employeeList);
+        if(validation.isValid){
+
+            let newEmpployeeInfo = new Employee(employeeID, nameNewInfo, emailNewInfo, startDateNewInfor, positionNewInfor);
+            // update employee information.
+            company.editEmployee(newEmpployeeInfo);
+
+            swal("Successful Update New Employee Detail!", "The employee list has been update", "success");
+            // Update the employeeList to localStorage
+            updateEmployeeListDataInLocalStorage(company.employeeList);
+            // display new employee list after edit employee detail.
+        }
     })
 }
 
