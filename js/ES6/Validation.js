@@ -58,6 +58,21 @@ class Validation {
             document.getElementById(spanID).innerHTML = message;
             return false;
     }
+    // Check the validation Australia number
+     isPhoneInputValid(inputVal, spanID, message) {
+        var regex = /^\(?(\d{2})\)?[\s-]?\d{4}[\s-]?\d{4}$/;
+        // if user input correct phone format
+        if(regex.test(inputVal))
+        {
+            document.getElementById(spanID).style.display = "none";
+            document.getElementById(spanID).innerHTML = message;
+            return true;
+        }
+        // if user input incorrect phone format
+            document.getElementById(spanID).style.display = "block";
+            document.getElementById(spanID).innerHTML = message;
+            return false;
+    }
     // Check user position Selection
     isPositionSelected(selectID, spanID, message){
         // if the user select position

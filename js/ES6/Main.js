@@ -164,6 +164,7 @@ document.getElementById("addButton").addEventListener("click", () => {
     let email = document.getElementById("email").value;
     let startDate = document.getElementById("datepicker").value;
     let position = document.getElementById("position").value;
+    let phone = document.getElementById("phone").value;
 
 
     // Create the Validation object
@@ -171,12 +172,13 @@ document.getElementById("addButton").addEventListener("click", () => {
 
     // Check user input name
     validation.isValid &= validation.isNotEmpty(name,"errorMessageName", "Please enter your name." );
-    validation.isValid &= validation.isValidInput(name,"errorMessageName", "Please input valid value.")
+    validation.isValid &= validation.isValidInput(name,"errorMessageName", "Please input valid value.");
     validation.isValid &= validation.isEmailInputValid(email, "errorMessageEmail", "Please enter employee email." );
+    validation.isValid &= validation.isPhoneInputValid(phone, "errMessagePhoneNum", "Please enter Australia phone." );
     validation.isValid &= validation.isPositionSelected("position", "errorMessagePosition", "Please select one employee position.");
 
     if(validation.isValid){
-        let newEmployee = new Employee(employeeID, name, email, startDate, position);
+        let newEmployee = new Employee(employeeID, name, email, startDate, phone, position);
         company.addNewEmployee(newEmployee);
         swal("Successful Add!", "The employee list has been update", "success");
         
@@ -210,6 +212,7 @@ editEmployeeDetail = (idButton) => {
         document.getElementById("email").value = employee.email;
         document.getElementById("datepicker").value = employee.startingDate;
         document.getElementById("position").value = employee.position;
+        document.getElementById("phone").value = employee.phone;
 
         // Display the pop-up form.
         popUpForm("Update Employee Detail", true, 2);
@@ -230,6 +233,7 @@ updateButton = () => {
         let emailNewInfo = document.getElementById("email").value;
         let startDateNewInfor = document.getElementById("datepicker").value;
         let positionNewInfor = document.getElementById("position").value;
+        let phoneNewInfor = document.getElementById("phone").value;
 
         var validation = new Validation();
         validation.isValid = true;
@@ -237,11 +241,12 @@ updateButton = () => {
         validation.isValid &= validation.isNotEmpty(nameNewInfo,"errorMessageName", "Please enter your name." );
         validation.isValid &= validation.isValidInput(nameNewInfo,"errorMessageName", "Please input valid value.")
         validation.isValid &= validation.isEmailInputValid(emailNewInfo, "errorMessageEmail", "Please enter employee email." );
+        validation.isValid &= validation.isPhoneInputValid(phoneNewInfor, "errMessagePhoneNum","Please enter Australia phone.")
         validation.isValid &= validation.isPositionSelected("position", "errorMessagePosition", "Please select one employee position.");
 
         if(validation.isValid){
 
-            let newEmpployeeInfo = new Employee(employeeID, nameNewInfo, emailNewInfo, startDateNewInfor, positionNewInfor);
+            let newEmpployeeInfo = new Employee(employeeID, nameNewInfo, emailNewInfo, startDateNewInfor, phoneNewInfor, positionNewInfor);
             // update employee information.
             company.editEmployee(newEmpployeeInfo);
 
@@ -249,6 +254,7 @@ updateButton = () => {
             // Update the employeeList to localStorage
             updateEmployeeListDataInLocalStorage(company.employeeList);
             // display new employee list after edit employee detail.
+            displayEmployeeList(company.employeeList);
         }
     })
 }
