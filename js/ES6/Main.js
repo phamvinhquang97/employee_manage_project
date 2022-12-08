@@ -51,6 +51,7 @@ resetErrorMessage = () =>{
     document.getElementById("errorMessageName").style.display = "none";
     document.getElementById("errorMessageEmail").style.display = "none";
     document.getElementById("errorMessagePosition").style.display = "none";
+    document.getElementById("errMessagePhoneNum").style.display = "none";
 
 }
 
